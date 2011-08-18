@@ -1,0 +1,132 @@
+<project name="Squishy" default="everything">
+	<target name="everything" depends="clean,war,javadoc-dist" />
+
+	<!-- Tweak these as appropriate -->
+	<property name="appName" value="resize" />
+	<property name="jarFileName" value="${appName}.jar" />
+	<property name="warFileName" value="${appName}.war" />
+	<property name="webInfDir" value="resources/WEB-INF" />
+	<property name="distDir" value="./dist" />
+	<property name="buildDir" value="./build" />
+	<property name="docDir" value="${buildDir}/javadoc" />
+	<property name="JBOSS_HOME" value="/usr/local/jboss" />
+	<property name="JBOSS_PROJECT" value="eonline" />
+	<property name="DeployDir" value="${JBOSS_HOME}/server/${JBOSS_PROJECT}/deploy" />
+	<property name="tmpDir" value="${JBOSS_HOME}/server/${JBOSS_PROJECT}/tmp" />
+	<property name="workDir" value="${JBOSS_HOME}/server/${JBOSS_PROJECT}/work" />
+	<property name="distDir" value="dist" />
+
+	<path id="compile.classpath">
+		<pathelement location="." />
+		<fileset dir="./lib" includes="*.jar" />
+		<fileset dir="./lib-build" includes="**/*.jar" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="${distDir}" />
+		<mkdir dir="${buildDir}" />
+	</target>
+
+
+	<target name="compile" depends="init">
+		<javac srcdir="src" destdir="${buildDir}" debug="yes">
+			<classpath>
+				<fileset dir="lib" includes="*.jar" />
+				<fileset dir="lib-build" includes="*.jar" />
+			</classpath>
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="clean">
+		<delete dir="${distDir}" />
+		<delete dir="${buildDir}" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${buildDir}/${jarFileName}">
+			<fileset dir="${buildDir}" includes="**/*.class" />
+			<fileset dir="lib" includes="*.jar"/>
+		</jar>
+	</target>
+
+	<target name="war" depends="jar">
+		<propertyfile comment="Image Resizer Application Information" file="${buildDir}/app.info">
+			<entry key="build.timestamp" type="date" pattern="MM/dd/yyyy HH:mm" value="now" />
+		</propertyfile>
+
+		<war destfile="${distDir}/${warFileName}" webxml="resources/WEB-INF/web.xml" manifest="conf/META-INF/manifest">
+			<webinf dir="${webInfDir}">
+				<include name="*.xml" />
+				<include name="jsp/**/*.jsp" />
+				<exclude name="web.xml" />
+			</webinf>
+
+            <lib dir="./lib" includes="**/*.jar"/>
+
+            <lib dir="${buildDir}" includes="${jarFileName}"/>
+            	
+			<fileset dir="${buildDir}">
+				<include name="app.info" />
+			</fileset>
+            <fileset dir="./resources/jsp">
+				<include name="**/*.jsp" />
+			</fileset>
+		</war>
+	</target>
+
+
+	<target name="javadoc" description="Generate Javadoc for the current code">
+		<echo message="Generating Javadoc for current code" />
+		<mkdir dir="${docDir}" />
+
+		<javadoc sourcepath="./src" packagenames="*" classpathref="compile.classpath" header="Documentation Updated ${build.timestamp}" footer="Documentation Updated ${build.timestamp}" destdir="${docDir}" />
+	</target>
+
+	<target name="javadoc-dist"
+            description="Package up javadoc so we can export it as a cruise control artifact"
+            depends="javadoc">
+		<mkdir dir="${distDir}" />
+		<jar destfile="${distDir}/javadocs.jar">
+			<fileset dir="${docDir}">
+				<include name="**/*" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="Undeploy">
+		<delete dir="${DeployDir}/${warFileName}" />
+		<echo message="Deleted ${DeployDir}/${warFileName}" />
+		<delete dir="${tmpDir}" />
+		<echo message="Deleted ${tmpDir}" />
+		<delete dir="${workDir}" />
+		<echo message="Deleted ${workDir}" />
+	</target>
+
+	<target name="EXPLODED-Deploy" depends="everything">
+		<echo message="Copying Files in ${distDir} to ${DeployDir}" />
+		<mkdir dir="${DeployDir}/${warFileName}" />
+		<unwar src="${distDir}/${warFileName}" dest="${DeployDir}/${warFileName}" />
+	</target>
+
+	<target name="EXPLODED-Update-server" description="Updates site local deployment">
+		<copy todir="${DeployDir}/${warFileName}">
+			<fileset dir="resources/jsp">
+				<include name="**/*.jsp" />
+			</fileset>
+		</copy>
+		<!-- refresh the build binary section configure files -->
+		<copy todir="${DeployDir}/${warFileName}/WEB-INF">
+			<fileset dir="resources/WEB-INF">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="EXPLODED-Update-All" depends="EXPLODED-Update-server" />
+
+	<tstamp>
+		<format property="build.timestamp" pattern="M d yyyy h:mm a" locale="en,US" />
+	</tstamp>
+
+</project>
+
