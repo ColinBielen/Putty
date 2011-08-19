@@ -51,12 +51,12 @@
             <description>Add a comma delimited list of hostnames to allow</description>
         </init-param>
     </filter>
-
+<!--
     <filter-mapping>
         <filter-name>AllowedHostnameFilter</filter-name>
         <url-pattern>/V1/*</url-pattern>
     </filter-mapping>
-
+-->
     <error-page>
         <error-code>401</error-code>
         <location>/status/401.jsp</location>

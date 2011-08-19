@@ -5,8 +5,6 @@ import java.awt.RenderingHints;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.ceg.properties.beans.data.Property;
-import com.ceg.properties.helpers.PropertyHelper;
 
 public class ResizerOptions {
 	private static Log log = LogFactory.getLog(ResizerOptions.class);
@@ -58,10 +56,11 @@ public class ResizerOptions {
 		encodingQuality = DEFAULT_ENCODE_QUALITY;
 		fileRoot = DEFAULT_IMAGE_FILE_ROOT;
 		requireCrop = false;
-		Property fileRootProp = null;
+		//Property fileRootProp = null;
 		try {
-			fileRootProp = PropertyHelper.getPropertyByName("image.resizer.file.root");
-			fileRoot = fileRootProp.getValue();
+		//	fileRootProp = PropertyHelper.getPropertyByName("image.resizer.file.root");
+		//	fileRoot = fileRootProp.getValue();
+            fileRoot = "/tmp";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.error("Property: 'image.resizer.file.root' not found.  Defaulting to "+DEFAULT_IMAGE_FILE_ROOT);

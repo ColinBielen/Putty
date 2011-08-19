@@ -71,6 +71,8 @@
 			</fileset>
             <fileset dir="./resources/jsp">
 				<include name="**/*.jsp" />
+                <include name="**/*.png" />
+                <include name="**/*." />
 			</fileset>
 		</war>
 	</target>

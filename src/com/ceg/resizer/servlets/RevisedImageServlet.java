@@ -77,90 +77,26 @@ public class RevisedImageServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        log.debug("Servlet Path = '" + request.getPathInfo() + "'");
-        String[] uriArray = request.getPathInfo().split("/");
-        //String[] uriArray = url.getPath().split("/");
-        ResizerOptions options = new ResizerOptions();
-        /*
-       Okay so if they follow our rules about url formatting we should end up with something like:
-
-           http://thishost.com/images.eonline.com/eol_images/Entire_Site/2011522/reg_634.kim.k.lc.062211,90-90,0-0-293-293.jpg
-           So splitting on "," means:
-           [0] = images.eonline.com   (remote host the image is coming from)
-           [1] = eol_images/Entire_Site/2011522/reg_634.kim.k.lc.062211 (path to file minus the extension)
-           [2] = 90-90 (resize instructions)
-           [3] = 0-0-293-293.jpg (crop instructions + extension).
-
-
-        */
-        //log.error("URI ARRAY SIZE ="+uriArray.length);
-        String imageHost = "";
-        StringBuffer pathBuffer = new StringBuffer();
-        String fileName = "";
-        for (int i = 1; i < uriArray.length; i++) {
-            //     log.error("Array "+i+" = "+uriArray[i]);
-            if (i == 1) {
-                imageHost = uriArray[i];
-            } else if (i + 1 == uriArray.length) {
-                fileName = uriArray[i];
+        StringTokenizer st = new StringTokenizer(request.getPathInfo(),"\\/");
+        int position =0;
+        StringBuffer imgURLBuffer = new StringBuffer("http://");
+        while(st.hasMoreTokens()) {
+            if(position==0) {
+                imgURLBuffer.append(st.nextToken());
+                ++position;
             } else {
-                if (!uriArray[i].startsWith("/")) {
-                    pathBuffer.append("/");
-                }
-                pathBuffer.append(uriArray[i]);
+                imgURLBuffer.append("/"+st.nextToken());
             }
         }
-
-        String path = pathBuffer.toString();
-        //reg_634.kim.k.lc.062211,90-90,0-0-293-293.jpg
-        String fileNameArray[] = fileName.split(",");
-        String fileBaseName = fileNameArray[0];
-        String scaleInstructions = fileNameArray[1];
-        String cropInstructionsAndExtension = fileNameArray[2];
-        String cropInstructions = "";
-        String fileExtension = "jpg";
-        if (cropInstructionsAndExtension != null) {
-            String[] tmpArray = cropInstructionsAndExtension.split("\\.");
-            if (tmpArray.length > 0) {
-                cropInstructions = tmpArray[0];
-                fileExtension = tmpArray[1];
-            }
-        }
-
-        log.debug("\tImage Host = '" + imageHost + "'");
-        log.debug("\tPath = '" + path + "'");
-        log.debug("\tfile base Name = '" + fileBaseName + "'");
-        log.debug("\traw crop instructions (plus extension) = '" + cropInstructionsAndExtension + "'");
-        log.debug("\tscale instructions = " + scaleInstructions);
-        log.debug("\tcrop instructions = " + cropInstructions);
-        log.debug("\tFile Extension = " + fileExtension);
-        //String resizeArray[] = resizeInstructions.split("-");
-        if (!scaleInstructions.isEmpty()) {
-            String[] scaleAry = scaleInstructions.split("-");
-            if (scaleAry.length > 1) {
-                log.error("Scale instructions passed...");
-                options.setWidth(scaleAry[0]);
-                options.setHeight(scaleAry[1]);
-            }
-        }
-        if (!cropInstructions.isEmpty()) {
-            log.error("Crop instructions passed..");
-            options.setCoordinates(cropInstructions);
-        }
-        // Reconstruct the URL of the original image sans formatting.
-        StringBuffer imgURLBuffer = new StringBuffer();
-        imgURLBuffer.append("http://")
-                .append(imageHost)
-                .append(path)
-                .append("/")
-                .append(fileBaseName).append(".")
-                .append(fileExtension);
 
         String imgString = imgURLBuffer.toString();
 
         log.error("Original Image We're looking for: " + imgString);
 
+
         File imgFile = new URLFileGrabber().getFile(imgString);
+
+
 
         //File imgFile = new File(options.getFileRoot() + imgString);
         // Get the file locally and do a basic existence test:
@@ -181,13 +117,43 @@ public class RevisedImageServlet extends HttpServlet {
             return;
         }
 
+        ResizerOptions options = this.parseOptions(request);
+
         options.setEncodingQuality(request.getParameter("encodeQuality"));
         options.setRenderHint(request.getParameter("renderHint"));
-
+        log.error("Rendering here!!");
         try {
             RenderFactory.getRenderer().resizeImage(imgFile, options, response.getOutputStream());
         } catch (InterruptedException ie) {
             throw new ServletException(ie.getMessage());
         }
     }
-}
+
+    /**
+     * Parses the resizer options.
+     * Pre-factored to its own method so we can modify it.
+     * @return
+     */
+    protected ResizerOptions parseOptions(HttpServletRequest request) {
+
+
+               String[] uriArray = request.getPathInfo().split("/");
+               //String[] uriArray = url.getPath().split("/");
+               ResizerOptions options = new ResizerOptions();
+
+
+                    options.setWidth(request.getParameter("width"));
+                    options.setHeight(request.getParameter("height"));
+
+                    options.setCoordinates(
+                                request.getParameter("x1")+"-"+
+                                request.getParameter("y1")+"-"+
+                                request.getParameter("x2")+"-"+
+                                request.getParameter("x2")+"-"
+                    );
+
+
+        return options;
+
+    }
+} //end servlet
