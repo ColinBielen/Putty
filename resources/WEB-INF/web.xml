@@ -48,6 +48,7 @@
         <init-param>
             <param-name>allowedHosts</param-name>
             <param-value>localhost,bender.eonline.com,0:0:0:0:0:0:0:1%0</param-value>
+            <description>Add a comma delimited list of hostnames to allow</description>
         </init-param>
     </filter>
 

@@ -1,8 +1,8 @@
-<project name="Squishy" default="everything">
+<project name="Putty" default="everything">
 	<target name="everything" depends="clean,war,javadoc-dist" />
 
 	<!-- Tweak these as appropriate -->
-	<property name="appName" value="resize" />
+	<property name="appName" value="putty" />
 	<property name="jarFileName" value="${appName}.jar" />
 	<property name="warFileName" value="${appName}.war" />
 	<property name="webInfDir" value="resources/WEB-INF" />

@@ -107,6 +107,7 @@ protected static void copy(InputStream in,OutputStream out) throws IOException{
 
     try {
       while (true) {
+         //Something tells me synchronizing on a static object might be a bad idea?
          synchronized (buffer) {
             int amountRead = in.read(buffer);
             if (amountRead == -1) {

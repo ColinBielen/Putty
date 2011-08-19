@@ -5,7 +5,6 @@ import java.awt.RenderingHints;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.ceg.online.toolbox.StringUtil;
 import com.ceg.properties.beans.data.Property;
 import com.ceg.properties.helpers.PropertyHelper;
 
@@ -44,7 +43,7 @@ public class ResizerOptions {
 	}
 
 	public void setFileRoot(String fileRoot) {
-		if(!StringUtil.isNullOrEmpty(fileRoot)) this.fileRoot = fileRoot;
+		if(isNullOrEmpty(fileRoot)) this.fileRoot = fileRoot;
 		else log.error("Attempted to pass empty file root.  Defaulting to "+this.fileRoot);
 	}
 
@@ -205,4 +204,7 @@ public class ResizerOptions {
 		this.requireCrop = requireCrop;
 	}
 
+    private boolean isNullOrEmpty(String fileRoot) {
+        return (fileRoot == null) || (fileRoot.isEmpty());
+    }
 }
