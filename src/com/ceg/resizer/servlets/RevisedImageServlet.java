@@ -103,6 +103,7 @@ public class RevisedImageServlet extends HttpServlet {
         if (!imgFile.exists()) {
             log.error("Couldn't find image file at " + imgFile.getPath());
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            request.setAttribute("message","Couldn't find a file at '"+imgString+"'");
             response.flushBuffer();
             return;
         }
