@@ -28,11 +28,11 @@ import com.ceg.resizer.util.ResizerOptions;
  * values will return the default size and non-jpg extensions will return a 404
  * status code.
  */
-public class ImageScalerServlet extends HttpServlet {
+public class LegacyImageScalerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -2296705384546611585L;
 
-	private static Log log = LogFactory.getLog(ImageScalerServlet.class);
+	private static Log log = LogFactory.getLog(LegacyImageScalerServlet.class);
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {

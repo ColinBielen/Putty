@@ -2,8 +2,6 @@ package com.ceg.resizer.servlets;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.CoderResult;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ceg.resizer.data.ImageRenderer;
 import com.ceg.resizer.util.URLFileGrabber;
-import com.sun.net.httpserver.HttpPrincipal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -40,12 +37,12 @@ import com.ceg.resizer.util.ResizerOptions;
  * file extension= ".jpg",etc/ Only jpg is supported right now :/
  * </pre>
  */
-public class RevisedImageServlet extends HttpServlet {
+public class DefaultImageServlet extends HttpServlet {
 
 
     private static final long serialVersionUID = -2296705384546611586L;
 
-    private static Log log = LogFactory.getLog(ImageScalerServlet.class);
+    private static Log log = LogFactory.getLog(LegacyImageScalerServlet.class);
 
     //We're making this configurable now because the default impl is kind of rough.
     private ImageRenderer renderer = null;

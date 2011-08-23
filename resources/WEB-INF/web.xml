@@ -4,10 +4,10 @@
 
 
     <servlet>
-        <servlet-name>RevisedImageServlet</servlet-name>
-        <display-name>RevisedImageServlet</display-name>
+        <servlet-name>DefaultImageServlet</servlet-name>
+        <display-name>DefaultImageServlet</display-name>
         <description>Servlet to dynamically resize an image</description>
-        <servlet-class>com.ceg.resizer.servlets.RevisedImageServlet</servlet-class>
+        <servlet-class>com.ceg.resizer.servlets.DefaultImageServlet</servlet-class>
         <init-param>
             <param-name>LocalCacheDir</param-name>
             <param-value>/tmp</param-value>
@@ -15,7 +15,7 @@
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RevisedImageServlet</servlet-name>
+        <servlet-name>DefaultImageServlet</servlet-name>
         <url-pattern>/V1/*</url-pattern>
 
     </servlet-mapping>
@@ -24,7 +24,7 @@
         <servlet-name>LegacyImageScalerServlet</servlet-name>
         <display-name>LegacyImageScalerServlet</display-name>
         <description>Legacy Image resizer currently used by EOL.</description>
-        <servlet-class>com.ceg.resizer.servlets.ImageScalerServlet</servlet-class>
+        <servlet-class>com.ceg.resizer.servlets.LegacyImageScalerServlet</servlet-class>
 
         <init-param>
             <param-name>LocalCacheDir</param-name>
@@ -38,9 +38,6 @@
         <url-pattern>/resize/*</url-pattern>
 
     </servlet-mapping>
-
-
-
 
     <filter>
         <filter-name>AllowedHostnameFilter</filter-name>

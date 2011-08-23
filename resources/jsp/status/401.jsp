@@ -2,7 +2,7 @@
                <html>
                <head>
                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-               <title>GUARDHOUSE - RESTful style authentication services</title>
+               <title>Putty - On-the-Fly Image Utilities</title>
                <style media="all" type="text/css">
                html, body { width: 100&; min-height: 100%; }
                html, body, hr, p { padding: 0; margin: 0; }
