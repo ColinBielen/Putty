@@ -45,21 +45,34 @@
     <div class="content">
     	<div class="wrapper">
         	<div class="innerwrapper">
-            <p>Putty is an image maniuplation service:</p>
-			<p class="parameters">width,height,x1,x2,y1,y2</p>
-			<p>Intro goes here</p>
+            <p>Putty is an on-the-fly image maniuplation service:</p>
+			<p class="urls">http://<%= request.getServerName() %>/V1/images.eonline.com/eol_images/Entire_Site/2011522/reg_634.kim.k.lc.062211.jpg
+</p>
+                Where:<br/>
+                <b>V1</b> = API version <br/>
+                <b>images.eonline.com</b> = server containing the original image <br/>
+                <b>eol_images/Entire_Site/2011522/reg_634.kim.k.lc.062211.jpg</b> = path and file name of original image on the site.<br/>
+                <b>width</b> = resize the above image to this width (in pixels) <br/>
+                <b>height</b> = resize the above image to this height (in pixels)  <br/>
+                <b>x1,y1</b> = crop point start coordinates. The upper left corner of the image is at coordinates 0,0 <br/>
+                <b>x2,y2</b> = crop point end coordinates. basically, "count this many pixels over from the starting pixels (x1,x2)".<br/>
+                Resizing happens *after* cropping operations.<br/>
+
+    
+
+<br/ >    
+            <p>Legacy URL Structure</p>
+     		<p>Putty provides backwards compatibility to the legacy EOL image resize servlet, though this format is considered deprecated</p>	
             <p class="urls">
-            	https://guardhouse.dev.comcastnets.net/cegauth/ldapauth?username=[username]&password=[password]&domain=[domain]<br>
-                https://guardhouse.test.comcastnets.net/cegauth/ldapauth?username=[username]&password=[password]&domain=[domain]<br>
-                https://guardhouse.prod.comcastnets.net/cegauth/ldapauth?username=[username]&password=[password]&domain=[domain]
+            	http://images.eonline.com/resize/66/66/0-0-293-293/eol_images/Entire_Site/20090311/293.romijn.oconnell.lc.031109.jpg
+			</p>
+			<p>
+                Where:<br/>
+                /66/66 = width & height resize values.
+                0-0-293-293 = crop arguments.
+                /20090311/293.romijn.oconnell.lc.031109.jpg = image path on "images.eonline.com"
             </p>
-            <p>Legacy URLSL</p>
-            <p class="urls">
-            	https://guardhouse.dev.comcastnets.net/cegauth/ldapauth?username=[username]&password=[password]&domain=[domain]<br>
-                https://guardhouse.test.comcastnets.net/cegauth/ldapauth?username=[username]&password=[password]&domain=[domain]<br>
-                https://guardhouse.prod.comcastnets.net/cegauth/ldapauth?username=[username]&password=[password]&domain=[domain]
-            </p>
-            <p>Legacy urls are provided for older code pointing at images.eonline.com</p>
+            <p>Legacy urls are provided for older code pointing at images.eonline.com.</p>
             </div>
         </div>
     </div>
