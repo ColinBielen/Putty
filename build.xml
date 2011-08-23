@@ -11,9 +11,9 @@
 	<property name="docDir" value="${buildDir}/javadoc" />
 	<property name="JBOSS_HOME" value="/usr/local/jboss" />
 	<property name="JBOSS_PROJECT" value="eonline" />
-	<property name="DeployDir" value="${JBOSS_HOME}/server/${JBOSS_PROJECT}/deploy" />
-	<property name="tmpDir" value="${JBOSS_HOME}/server/${JBOSS_PROJECT}/tmp" />
-	<property name="workDir" value="${JBOSS_HOME}/server/${JBOSS_PROJECT}/work" />
+	<property name="DeployDir" value="/usr/local/apache-tomcat-6.0.18/webapps" />
+	<property name="tmpDir" value="/usr/local/apache-tomcat-6.0.18/temp" />
+	<property name="workDir" value="/usr/local/apache-tomcat-6.0.18/work" />
 	<property name="distDir" value="dist" />
 
 	<path id="compile.classpath">
@@ -104,6 +104,17 @@
 		<delete dir="${workDir}" />
 		<echo message="Deleted ${workDir}" />
 	</target>
+
+    <target name="deploy" depends="war">
+        <copy todir="${DeployDir}">
+           <fileset dir="${distDir}">
+               <include name="**/*.war" />
+           </fileset>
+        </copy>
+
+    </target>
+
+
 
 	<target name="EXPLODED-Deploy" depends="everything">
 		<echo message="Copying Files in ${distDir} to ${DeployDir}" />

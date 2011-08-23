@@ -10,9 +10,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.Element;
 
 import com.ceg.resizer.data.ImageRenderer;
 import com.ceg.resizer.util.URLFileGrabber;
+import com.sun.tools.internal.ws.processor.model.Request;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -110,6 +112,7 @@ public class DefaultImageServlet extends HttpServlet {
         if (!Pattern.matches(".*jpe?g", imgString)) {
             log.error("The extension " + imgString.substring(imgString.lastIndexOf(".")) + " for " + imgString
                     + " is not a jpg.");
+            response.addHeader("X-Putty-Rendering-Notes"," File extension is not .jpg. This image format isn't currently supported.");
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             response.flushBuffer();
             return;
@@ -119,9 +122,16 @@ public class DefaultImageServlet extends HttpServlet {
 
         options.setEncodingQuality(request.getParameter("encodeQuality"));
         options.setRenderHint(request.getParameter("renderHint"));
-        log.error("Rendering here!!");
+        log.info("Rendering here!!");
         try {
+           response.addHeader("X-Putty-Rendering-Notes",
+                    "Image resized to "+options.getWidth()+"x"+options.getHeight()+","
+                    +" and cropped to "+options.getXCoordinate()+","+options.getYCoordinate()+","
+                    +options.getXOffset()+","+options.getYOffset());
             RenderFactory.getRenderer().resizeImage(imgFile, options, response.getOutputStream());
+            //Senda response header telling them what we did in case it's different than
+            //what was expected.
+
         } catch (InterruptedException ie) {
             throw new ServletException(ie.getMessage());
         }
@@ -139,19 +149,45 @@ public class DefaultImageServlet extends HttpServlet {
                //String[] uriArray = url.getPath().split("/");
                ResizerOptions options = new ResizerOptions();
 
-
-                    options.setWidth(request.getParameter("width"));
-                    options.setHeight(request.getParameter("height"));
-
-                    options.setCoordinates(
+                    if(hasValidResizeOptions(request)) {
+                        options.setWidth(request.getParameter("width"));
+                        options.setHeight(request.getParameter("height"));
+                    }
+                    if(hasValidCropOptions(request)) {
+                        options.setCoordinates(
                                 request.getParameter("x1")+"-"+
                                 request.getParameter("y1")+"-"+
                                 request.getParameter("x2")+"-"+
                                 request.getParameter("x2")+"-"
-                    );
+                        );
+                    }
 
 
         return options;
 
     }
+
+    protected boolean hasValidResizeOptions(HttpServletRequest r) {
+            if(isNullOrEmpty(r.getParameter(("width")))) { return false; }
+            if(isNullOrEmpty(r.getParameter(("width")))) { return false; }
+            return true;
+    }
+
+    protected boolean hasValidCropOptions(HttpServletRequest r) {
+            if(isNullOrEmpty(r.getParameter(("x1")))) { return false; }
+            if(isNullOrEmpty(r.getParameter(("x2")))) { return false; }
+            if(isNullOrEmpty(r.getParameter(("y1")))) { return false; }
+            if(isNullOrEmpty(r.getParameter(("y2")))) { return false; }
+            return true;
+
+    }
+
+    private boolean isNullOrEmpty(String s) {
+        if(s == null) {
+            return true;
+        } else {
+            return s.isEmpty();
+        }
+    }
+
 } //end servlet
