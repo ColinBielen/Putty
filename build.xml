@@ -73,6 +73,7 @@
 				<include name="**/*.jsp" />
                 <include name="**/*.png" />
                 <include name="**/*.css" />
+                <include name="**/*.jpg" />
                 <include name="**/*." />
 			</fileset>
 		</war>
