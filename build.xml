@@ -25,7 +25,7 @@
               value="ec2-user@ec2-184-73-45-249.compute-1.amazonaws.com:/usr/local/tomcat/webapps/ROOT.war"/>
     <property name="ec2.remotepath.2"
                   description="remote path to ec2 webapp directory"
-                  value="ec2-user@ec2-184-72-197-162.compute-1.amazonaws.com:/usr/local/tomcat/webapps/ROOT.war"/>
+                  value="ec2-user@ec2-75-101-169-37.compute-1.amazonaws.com:/usr/local/tomcat/webapps/ROOT.war"/>
 
     <!-- end ec2 variables -->
 
