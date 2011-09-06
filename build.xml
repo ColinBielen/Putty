@@ -15,6 +15,15 @@
 	<property name="tmpDir" value="/usr/local/apache-tomcat-6.0.18/temp" />
 	<property name="workDir" value="/usr/local/apache-tomcat-6.0.18/work" />
 	<property name="distDir" value="dist" />
+    <!-- ec2 variables.
+          Make sure jsch.jar is in your ant classpath for scp to work! -->
+    <property name="ec2.keyfile"
+              description="ec2 key for ssh access to the cloud instance"
+              value="/Users/cbielen/.ec2/intl-jv-keypair.pem" />
+    <property name="ec2.remotepath"
+              description="remote path to ec2 webapp directory"
+              value="ec2-user@ec2-184-73-45-249.compute-1.amazonaws.com:/usr/local/tomcat/webapps/ROOT.war"/>
+    <!-- end ec2 variables -->
 
 	<path id="compile.classpath">
 		<pathelement location="." />
@@ -116,6 +125,17 @@
 
     </target>
 
+    <target name="deploy-ec2" depends="war">
+        <scp description="SCP up to our reserved ec2 instance(s)"
+             file="${distDir}/putty.war"
+             keyfile="${ec2.keyfile}"
+             remoteToFile="${ec2.remotepath}"
+            verbose="true"
+             trust="true">
+        </scp>
+
+
+    </target>
 
 
 	<target name="EXPLODED-Deploy" depends="everything">
