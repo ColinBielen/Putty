@@ -16,6 +16,7 @@ body { font-size: 14px; font-family: Arial, Helvetica, sans-serif; color: #666; 
 			-webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.32);
 			-moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.32);
 			box-shadow: 0px 1px 3px 0px rgba(0,0,0,.32); }	
+
 	.content .wrapper { padding: 313px 36px 61px 36px; background: url(/images/logo_putty.png) center 69px no-repeat; }
 	.content .innerwrapper { border-top: 1px #eee solid; padding: 29px 0; }
 	.content .parameters { color: #000; font-size: 24px; font-weight: bold; text-align: center; margin: 11px 0; }
