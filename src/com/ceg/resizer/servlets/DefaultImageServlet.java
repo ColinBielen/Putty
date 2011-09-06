@@ -22,7 +22,7 @@ import com.ceg.resizer.data.RenderFactory;
 import com.ceg.resizer.util.ResizerOptions;
 
 /**
- * Servlet that does the dynamic cropping and rescaling of ausr/l jpeg image.
+ * Servlet that does the dynamic cropping and rescaling of a jpeg image.
  * <p/>
  * This uses an updated URL format that can service multiple hosts and is easier to maintain if you're
  * using a CDN or other cache in between this app and any user-end traffic (which you SHOULD be doing!)

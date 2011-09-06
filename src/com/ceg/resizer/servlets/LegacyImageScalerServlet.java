@@ -18,8 +18,10 @@ import com.ceg.resizer.data.RenderFactory;
 import com.ceg.resizer.util.ResizerOptions;
 
 /**
- * Servlet that does the dynamic cropping and rescaling of ausr/l jpeg image.
- * 
+ *
+ * Servlet that does the dynamic cropping and rescaling of a jpeg image.
+ * It's the same code used by the current EOL site and is here for backward
+ * compatibility purposes. New users should really use the DefaultImageServlet
  * To use this, the servlet should be mapped to /* in web.xml. Then the
  * correct URI to go to in your web browser would be
  * http://www.eonline.com/resize/66/66/foo/bar/baz.jpg or
@@ -27,6 +29,7 @@ import com.ceg.resizer.util.ResizerOptions;
  * /foo/bar/baz.jpg is a valid uri on www.eonline.com. Invalid width/height
  * values will return the default size and non-jpg extensions will return a 404
  * status code.
+ * @see DefaultImageServlet for the preferred Servlet.
  */
 public class LegacyImageScalerServlet extends HttpServlet {
 
