@@ -20,9 +20,13 @@
     <property name="ec2.keyfile"
               description="ec2 key for ssh access to the cloud instance"
               value="/Users/cbielen/.ec2/intl-jv-keypair.pem" />
-    <property name="ec2.remotepath"
+    <property name="ec2.remotepath.1"
               description="remote path to ec2 webapp directory"
               value="ec2-user@ec2-184-73-45-249.compute-1.amazonaws.com:/usr/local/tomcat/webapps/ROOT.war"/>
+    <property name="ec2.remotepath.2"
+                  description="remote path to ec2 webapp directory"
+                  value="ec2-user@ec2-184-72-197-162.compute-1.amazonaws.com:/usr/local/tomcat/webapps/ROOT.war"/>
+
     <!-- end ec2 variables -->
 
 	<path id="compile.classpath">
@@ -126,13 +130,22 @@
     </target>
 
     <target name="deploy-ec2" depends="war">
+        <echo message="Copying war file to ${ec2.remotepath.1}"/>
         <scp description="SCP up to our reserved ec2 instance(s)"
              file="${distDir}/putty.war"
              keyfile="${ec2.keyfile}"
-             remoteToFile="${ec2.remotepath}"
+             remoteToFile="${ec2.remotepath.1}"
             verbose="true"
              trust="true">
         </scp>
+        <echo message="Copying war file to ${ec2.remotepath.2}"/>
+        <scp description="SCP up to our reserved ec2 instance(s)"
+                     file="${distDir}/putty.war"
+                     keyfile="${ec2.keyfile}"
+                     remoteToFile="${ec2.remotepath.2}"
+                    verbose="true"
+                     trust="true">
+                </scp>
 
 
     </target>
