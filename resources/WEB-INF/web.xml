@@ -39,6 +39,23 @@
 
     </servlet-mapping>
 
+
+    <filter>
+        <filter-name>APIKeyFilter</filter-name>
+        <filter-class>com.ceg.resizer.filters.APIKeyFilter</filter-class>
+        <init-param>
+            <param-name>api-keys</param-name>
+            <description>A Comma-delimited list of valid API keys the app will accept.</description>
+            <param-value></param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>APIKeyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
     <filter>
         <filter-name>AllowedHostnameFilter</filter-name>
         <filter-class>com.ceg.resizer.filters.AllowedHostnameFilter</filter-class>

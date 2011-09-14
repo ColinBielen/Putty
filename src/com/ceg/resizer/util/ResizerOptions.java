@@ -6,6 +6,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
+/**
+ * Class ripped from the legacy app. Soon to be deprecated.
+ */
 public class ResizerOptions {
 	private static Log log = LogFactory.getLog(ResizerOptions.class);
 	private static final String DEFAULT_IMAGE_FILE_ROOT = "/www/www.eonline.com/images/";
