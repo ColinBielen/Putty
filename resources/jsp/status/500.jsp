@@ -26,12 +26,18 @@
        	<div class="innerwrapper">
 
        	<!-- TEXT GOES HERE! -->
-           <p>500: Error</p>
+           <p><b>500: Error</b></p>
            <p class="stacktrace">
 
             <%= trace %>
            </p>
 <!-- End Text-->
+
+<br/>&nbsp;<br/>
+<b>Questions?</b>
+      <ul>
+        Join the discussion or ask a question <a href="http://groups.google.com/group/ptg-putty-users">here</a>
+      </ul>
 
            </div>
        </div>

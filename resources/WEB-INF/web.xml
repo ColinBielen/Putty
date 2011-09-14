@@ -52,7 +52,8 @@
 
     <filter-mapping>
         <filter-name>APIKeyFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+  <url-pattern>/resize/*</url-pattern>
+  <url-pattern>/V1/*</url-pattern>
     </filter-mapping>
 
 

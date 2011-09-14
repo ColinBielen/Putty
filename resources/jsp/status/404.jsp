@@ -19,14 +19,20 @@
        <span class="logo nbcu" title="NBCUniversal"></span>
    </div>
    <div class="content">
-   	<div class="wrapper"><p>404: Not Found.</p>
+   	<div class="wrapper"><p><b>404: Not Found.</b></p>
        	<div class="innerwrapper">
-
+         <ul>
        	<!-- TEXT GOES HERE! -->
 
            <p><%= messageString %></p>
 
 <!-- End Text-->
+         </ul>
+<br/>&nbsp;<br/>
+<b>Questions?</b>
+      <ul>
+        Join the discussion or ask a question <a href="http://groups.google.com/group/ptg-putty-users">here</a>
+      </ul>
 
            </div>
        </div>

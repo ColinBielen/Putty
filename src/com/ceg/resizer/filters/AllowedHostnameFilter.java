@@ -13,8 +13,11 @@ import java.util.StringTokenizer;
 
 /**
  * This Filter rejects requests that don't come from a specific set of hostnames or IP addresses.
- * The idea is that we don't want to be a universally accessible image manipulator.
- * Yet :)
+ * The idea is that clients have proxies sitting in front of this service that do CDN/Varnish caching,
+ * accellerator, and URL rewriting.
+ *
+ * We also don't want to open this up to the world. Yet :)
+
  */
 public class AllowedHostnameFilter implements Filter {
     static final Log log = LogFactory.getLog(AllowedHostnameFilter.class);

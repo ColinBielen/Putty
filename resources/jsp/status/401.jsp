@@ -20,12 +20,23 @@
    <div class="content">
    	<div class="wrapper">
        	<div class="innerwrapper">
-
+           <p><b>401: Unauthorized.</b></p>
+           <ul>
        	<!-- TEXT GOES HERE! -->
-           <p>401: Unauthorized</p>
 
-<!-- End Text-->
           <p><%= messageString %></p>
+<!-- End Text-->
+
+          </ul>
+
+           <br/>&nbsp;<br/>
+
+<b>Questions?</b>
+      <ul>
+        Join the discussion or ask a question <a href="http://groups.google.com/group/ptg-putty-users">here</a>
+      </ul>
+
+
            </div>
        </div>
    </div>

@@ -2,6 +2,7 @@ package com.ceg.resizer.filters;
 
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import org.omg.CORBA.Request;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,7 @@ import java.util.Map;
  * Valid keys are registered in the filter config by defining a comma-delmited list as the "api-keys" config param.
  *
  *  Keys are passed either as a request parameter (called "api-key") or
- *  in a request header ("x-ptg-api-key")
+ *  in a request header ("x-api-key")
  *
  *
  */
@@ -31,9 +32,14 @@ public class APIKeyFilter implements Filter {
     public static final String CONFIG_PARAMETER_NAME = "api-keys";
 
     public static final String REQUEST_PARAM_NAME = "api-key";
-    public static final String REQUEST_HEADER_NAME = "x-ptg-api-key";
+    public static final String REQUEST_HEADER_NAME = "x-api-key";
 
-
+    /**
+     * Registers the list of allowed API keys from the filter config.
+     *
+     * @param filterConfig
+     * @throws ServletException
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         String keyString = (String)filterConfig.getInitParameter(CONFIG_PARAMETER_NAME);
@@ -45,13 +51,30 @@ public class APIKeyFilter implements Filter {
 
     }
 
+    /**
+     * Returns a 401 error if the API key is invalid.
+     * Otherwise lets the request pass through.
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void
+    doFilter(ServletRequest servletRequest,
+             ServletResponse servletResponse,
+             FilterChain filterChain)
+    throws IOException, ServletException {
         String apiKey = getAPIKey(servletRequest);
-        log.error("API KEY = "+apiKey);
+        log.debug("API KEY = "+apiKey);
         if(!isValid(apiKey)) {
           HttpServletResponse rs = (HttpServletResponse) servletResponse;
+            servletRequest.setAttribute("message",
+                                        "Make sure you're passing the correct API key,either as the '"
+                                         +REQUEST_PARAM_NAME+"' request parameter, or as a request header called '"+REQUEST_HEADER_NAME+"'");
             rs.sendError(401, "Invalid api key");
+
             rs.flushBuffer();
         } else {
             filterChain.doFilter(servletRequest,servletResponse);
@@ -89,6 +112,11 @@ public class APIKeyFilter implements Filter {
        return apiKey;
     }
 
+    /**
+     * Makes sure the passed key.. isValid!
+     * @param apiKey
+     * @return
+     */
     protected boolean isValid(String apiKey) {
         return apiKeyMap.containsKey(apiKey);
     }
