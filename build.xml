@@ -1,7 +1,34 @@
-<project name="Putty" default="everything">
-	<target name="everything" depends="clean,war,javadoc-dist" />
+<project name="Putty" default="war">
 
-	<!-- Tweak these as appropriate -->
+    <property file="${user.home}/build.properties"/>
+
+    <!-- Sonar code reporting task: http://www.sonarsource.org -->
+    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+        <!-- Specify the task libaray here unless it's already in your ${ANT_HOME}/lib directory -->
+        <classpath path="lib-build/sonar-ant-task-1.3.jar" />
+    </taskdef>
+    <!-- Sonar server  variables.
+         I can't find docs if you're supposed to have the jdbc connections in here
+         if you're submitting to a remote server.
+         Seems like a security and mgmt nightmare to keep values visible and in sync accross projects,
+         so just put the "real" values in the build.properties file you're including. -->
+
+    <property name="sonar.jdbc.url"
+              value=""
+              description="Set this in your external build.properties file" />
+    <property name="sonar.jdbc.username" 
+              value=""
+              description="Set this in your external build.properties file" />
+    <property name="sonar.jdbc.password" 
+              value=""
+              description="Set this in your external build.properties file" />
+<!-- If sonar is running on a remote host -->
+    <property name="sonar.host.url"
+              value=""
+              description="Set this in your external build.properties file" />
+
+
+	<!-- Tweak these as appropriate or override in your build.properties file -->
 	<property name="appName" value="putty" />
 	<property name="jarFileName" value="${appName}.jar" />
 	<property name="warFileName" value="${appName}.war" />
@@ -15,11 +42,12 @@
 	<property name="tmpDir" value="/usr/local/apache-tomcat-6.0.18/temp" />
 	<property name="workDir" value="/usr/local/apache-tomcat-6.0.18/work" />
 	<property name="distDir" value="dist" />
+
     <!-- ec2 variables.
           Make sure jsch.jar is in your ant classpath for scp to work! -->
     <property name="ec2.keyfile"
               description="ec2 key for ssh access to the cloud instance"
-              value="/Users/cbielen/.ec2/intl-jv-keypair.pem" />
+              value="${user.home}/.ec2/intl-jv-keypair.pem" />
     <property name="ec2.remotepath.1"
               description="remote path to ec2 webapp directory"
               value="ec2-user@ec2-184-73-45-249.compute-1.amazonaws.com:/usr/local/tomcat/webapps/ROOT.war"/>
@@ -35,10 +63,13 @@
 		<fileset dir="./lib-build" includes="**/*.jar" />
 	</path>
 
+    <target name="everything" depends="clean,war,javadoc-dist,sonar" />
+
 	<target name="init">
 		<mkdir dir="${distDir}" />
 		<mkdir dir="${buildDir}" />
 	</target>
+
 
 
 	<target name="compile" depends="init">
@@ -171,6 +202,17 @@
 		</copy>
 	</target>
 	<target name="EXPLODED-Update-All" depends="EXPLODED-Update-server" />
+
+    <target name="sonar" description="Sonar code reporting">
+        <property name="sonar.sources" value="src,resources/jsp" />
+
+        <property name="sonar.binaries" value="${buildDir}" />
+        <property name="sonar.libraries" value="lib,lib-build" />
+
+        <sonar:sonar key="com.nbcuni.onts.ptg:Putty"
+                     version="1.0-SNAPSHOT"
+                     xmlns:sonar="antlib:org.sonar.ant"/>
+    </target>
 
 	<tstamp>
 		<format property="build.timestamp" pattern="M d yyyy h:mm a" locale="en,US" />
