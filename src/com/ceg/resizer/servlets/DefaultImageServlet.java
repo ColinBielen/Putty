@@ -93,7 +93,11 @@ public class DefaultImageServlet extends HttpServlet {
         log.error("Original Image We're looking for: " + imgString);
 
 
-        File imgFile = new URLFileGrabber().getFile(imgString);
+        URLFileGrabber fileGrabber = new URLFileGrabber();
+        if(this.getServletContext().getInitParameter("LocalCacheDirectory") != null) {
+            fileGrabber.setDownloadDir(this.getServletContext().getInitParameter("LocalCacheDirectory"));
+        }
+        File imgFile = fileGrabber.getFile(imgString);
 
 
 

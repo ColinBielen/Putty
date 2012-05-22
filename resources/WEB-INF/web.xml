@@ -2,17 +2,26 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
+    <context-param>
+        <param-name>LocalCacheDirectory</param-name>
+        <param-value>/var/cache/putty</param-value>
+        <description>Directory we want our local cache so we don't Download the image every time.</description>
+    </context-param>
+    <context-param>
+        <param-name>CacheMaxFileAge</param-name>
+        <param-value>24</param-value>
+        <description>Max age (in hours) we want to keep cached images before deleting them</description>
+    </context-param>
+
+   <listener>
+       <listener-class>com.ceg.resizer.listeners.CacheCleanupServiceListener</listener-class>
+   </listener>
 
     <servlet>
         <servlet-name>DefaultImageServlet</servlet-name>
-        <display-name>DefaultImageServlet</display-name>
+        <display-name>Default Image Servlet</display-name>
         <description>Servlet to dynamically resize an image</description>
         <servlet-class>com.ceg.resizer.servlets.DefaultImageServlet</servlet-class>
-        <init-param>
-            <param-name>LocalCacheDir</param-name>
-            <param-value>/tmp</param-value>
-            <description>Directory we want our local cache so we don't Download the image every time.</description>
-        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>DefaultImageServlet</servlet-name>
@@ -22,15 +31,9 @@
 
     <servlet>
         <servlet-name>LegacyImageScalerServlet</servlet-name>
-        <display-name>LegacyImageScalerServlet</display-name>
-        <description>Legacy Image resizer currently used by EOL.</description>
+        <display-name>Legacy Image Scaler Servlet</display-name>
+        <description>Legacy Image resizer currently used by EOL since 2006.</description>
         <servlet-class>com.ceg.resizer.servlets.LegacyImageScalerServlet</servlet-class>
-
-        <init-param>
-            <param-name>LocalCacheDir</param-name>
-            <param-value>/tmp</param-value>
-            <description>Directory we want our local cache so we don't Download the image every time.</description>
-        </init-param>
     </servlet>
 
     <servlet-mapping>
@@ -46,7 +49,7 @@
         <init-param>
             <param-name>api-keys</param-name>
             <description>A Comma-delimited list of valid API keys the app will accept.</description>
-            <param-value></param-value>
+            <param-value>demo,eonline,eonlinelatino,eonline.mobile</param-value>
         </init-param>
     </filter>
 

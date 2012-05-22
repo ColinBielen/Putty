@@ -66,7 +66,7 @@ public class URLFileGrabber
 
             URL url = new URL(urlString);
             outputFile = new File(downloadDir+"/"+url.getHost(),url.getPath());
-            log.error("Output File = "+outputFile.toString());
+            log.info("Output File = "+outputFile.toString());
             if(!outputFile.exists()) {
                try {
                    URLConnection conn = url.openConnection();
@@ -84,7 +84,7 @@ public class URLFileGrabber
                     log.error(e.getMessage(),e);
                 }
             } else {
-                log.error("output file already exists. using cache version");
+                log.info("output file already exists. using cache version");
             }
 
         } catch(MalformedURLException mf) {

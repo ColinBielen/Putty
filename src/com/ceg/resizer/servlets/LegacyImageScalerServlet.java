@@ -85,9 +85,14 @@ public class LegacyImageScalerServlet extends HttpServlet {
         //this is not a hack: This is "Backwards Compatability" :P
         imgString = "http://images.eonline.com"+imgString;
 
-         File imgFile = new URLFileGrabber().getFile(imgString);
+        URLFileGrabber fileGrabber = new URLFileGrabber();
+        if(this.getServletContext().getInitParameter("LocalCacheDirectory") != null) {
+            fileGrabber.setDownloadDir(this.getServletContext().getInitParameter("LocalCacheDirectory"));
+        }
+        File imgFile = fileGrabber.getFile(imgString);
 
-		// Get the file locally and do a basic existence test:
+
+        // Get the file locally and do a basic existence test:
 		if (!imgFile.exists()) {
 			log.error("Couldn't find image file at " + imgFile.getPath());
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);

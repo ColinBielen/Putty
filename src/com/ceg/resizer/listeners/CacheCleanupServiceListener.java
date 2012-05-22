@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.ceg.resizer.util.FileCacheCleanup;
+import com.ceg.resizer.util.CacheCleanupTask;
 
 /**
  * Listener that initializes the cache cleanup on a dedicated thread.
@@ -15,22 +15,29 @@ import com.ceg.resizer.util.FileCacheCleanup;
  */
  public class CacheCleanupServiceListener implements ServletContextListener {
 
-    /**
-     * This is the name of the init param we're looking for. Currently it's set to "Cache-Directory".
-     */
-    protected final String CACHE_DIR_PARAM_NAME = "Cache-Directory";
 
     private ScheduledExecutorService scheduler;
 
-    @Override
+    /**
+     * Set up the Cleanup task and initialize the values as specified in web.xml
+     * @param servletContextEvent
+     */
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        String cacheRoot = servletContextEvent.getServletContext().getInitParameter(CACHE_DIR_PARAM_NAME);
-        scheduler.scheduleAtFixedRate(new FileCacheCleanup(cacheRoot), 0, 1, TimeUnit.HOURS);
+        //String cacheRoot = servletContextEvent.getServletContext().getInitParameter(CACHE_DIR_PARAM_NAME);
+        CacheCleanupTask task = new CacheCleanupTask();
+        task.setCacheDirectory(servletContextEvent.getServletContext().getInitParameter("LocalCacheDirectory"));
+        task.setMaxFileAge(Integer.parseInt(servletContextEvent.getServletContext().getInitParameter("CacheMaxFileAge")));
+
+        scheduler.scheduleAtFixedRate(task, 0, 5, TimeUnit.MINUTES);
     }
 
-    @Override
+    /**
+     * Shut down the internal scheduler.
+     *
+     * @param servletContextEvent
+     */
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-         scheduler.shutdown();
+         scheduler.shutdown(); //As they say in Dark City: SHUT IT DOWN!
     }
 }

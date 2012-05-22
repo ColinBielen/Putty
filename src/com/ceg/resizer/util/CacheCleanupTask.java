@@ -62,7 +62,7 @@ public class CacheCleanupTask extends TimerTask {
             for(File c :  f.listFiles())
               recursivelyDeleteOldFiles(c);
         }
-        if(f.lastModified() < (System.currentTimeMillis() - (1000*60*60*24))) {
+        if(f.lastModified() < (System.currentTimeMillis() - (1000*60*60*maxFileAge))) {
            //log.warn("Should Delete "+f.getPath()+" because it's old...");
            if(!f.delete()) {
                 log.warn("Can't delete file "+f.getPath()+". Skipping ");
